@@ -8,7 +8,7 @@ import pymongo
 from datetime import datetime,timedelta,date
 import tldextract
 import json
-import time
+# import time
 # from bson import json_util #用来使json可转换datetime
 
 
@@ -50,12 +50,12 @@ def get_domain_collection(domain=None):
     """
     if domain is None:
         return
-    collection_name = domain.replace('.','_')
+    collection_name = domain.replace('.', '_')
     db = get_db()
     return db[collection_name]
 
 
-def get_domain_info(domain=None,start_date=None,end_date=None):
+def get_domain_info(domain=None, start_date=None, end_date=None):
     """
     获取指定域名和日期的探测数据，根据开始日期和结束日期，从数据库中获取当天数据
     :param domain: 域名
@@ -65,35 +65,35 @@ def get_domain_info(domain=None,start_date=None,end_date=None):
     """
     # if start_date.date() == end_date.date():    # 获得域名的当天探测数据
     domain_collection = get_domain_collection(domain)
-    return domain_collection.find({'visit_time':{'$lte':end_date,'$gte':start_date}})
+    return domain_collection.find({'visit_time': {'$lte': end_date,'$gte': start_date}}).sort('visit_time', pymongo.ASCENDING)
 
 
-def extract_pkt_count(domain_dns_pkt = None):
-    """
+# def extract_pkt_count(domain_dns_pkt = None):
+#     """
+#
+#     :return:
+#     """
+#     pkt_list = []
+#     if domain_dns_pkt is None:
+#         return
+#     for pkt in domain_dns_pkt:
+#         # print pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S")
+#         visit_time = pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S")
+#         pkt_list.append({'visit_time':visit_time, 'pkt_count':int(pkt['pkt_count'])})
+#     # print pkt_list
+#     return json.dumps(pkt_list)
 
-    :return:
-    """
+
+def get_same_day_pkt_count(domain, start, end):
+
+    start = datetime.strptime(start, '%Y-%m-%d')
+    # end = datetime.utcnow()+ timedelta(hours=8)  # 当前时间，timedelta是为了成为北京时间
+    end = datetime.strptime(end, '%Y-%m-%d') + timedelta(hours=24)
     pkt_list = []
-    if domain_dns_pkt is None:
-        return
+    domain_dns_pkt = get_domain_info(domain, start, end)
     for pkt in domain_dns_pkt:
-        # print pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S")
-        visit_time = pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S")
-        pkt_list.append({'visit_time':visit_time, 'pkt_count':int(pkt['pkt_count'])})
-    # print pkt_list
-    return json.dumps(pkt_list)
-
-
-def get_same_day_pkt_count(domain,start,end):
-
-    start = datetime.strptime(start,'%Y-%m-%d')
-    end = datetime.utcnow()+ timedelta(hours=8)
-    pkt_list = []
-    domain_dns_pkt = get_domain_info(domain,start,end)
-    for pkt in domain_dns_pkt:
-        tmp = {'visit_time':0, 'qry_pkt':0, 'resp_pkt':0}
-        tmp['visit_time'] = pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S")
-
+        tmp = {'visit_time': pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S"), 'qry_pkt': 0, 'resp_pkt': 0}
+        print pkt['visit_time']
         for i in pkt['details']:
             if len(i['dns']) <= 1:
                 tmp['qry_pkt'] += 1

@@ -5,20 +5,12 @@ from models.pkt import get_same_day_pkt_count
 
 PATH = './pkt/'
 
-class PktHandler(tornado.web.RequestHandler):
+
+class PktDailyHandler(tornado.web.RequestHandler):
 
     def get(self):
 
-
-        # tlds = TldDb().get_tlds()
-        # self.render('tld.html',
-        #             tlds_num=len(tlds),
-        #             tlds=tlds,
-        #             )
-        self.render(PATH + 'pkt_same_day.html',
-                    # results=results
-                    )
-        # self.write("hello")
+        self.render(PATH + 'daily_count.html')
 
 
 class ManageIncreaseHandler(tornado.web.RequestHandler):
@@ -27,7 +19,13 @@ class ManageIncreaseHandler(tornado.web.RequestHandler):
         domain = self.get_argument('domain',"None")
         start = self.get_argument('start', "None")
         end = self.get_argument('end', "None")
-        detect =get_same_day_pkt_count(domain,start,end)
+        detect = get_same_day_pkt_count(domain, start, end)
         # detect = test()
         # print detect
         self.write(detect)
+
+
+class PktTrendHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.render(PATH + 'trend_count.html')

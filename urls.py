@@ -2,13 +2,13 @@
 """
 系统路由设置
 """
-# from handlers.index import IndexHandler
-from handlers.pkt import PktHandler,ManageIncreaseHandler
+from handlers.pkt import PktDailyHandler,ManageIncreaseHandler,PktTrendHandler
 urls = [
     # (r'/',IndexHandler),
-    (r'/',PktHandler), # 测试使用
-    # (r'/pkt/detail',PktHandler)
-    (r'/pkt/same-day',ManageIncreaseHandler)
+    (r'/pkt/daily-count', PktDailyHandler),  # 天为单位统计
+    (r'/pkt/same-day',ManageIncreaseHandler),  # 根据日期选择数据
+    (r'/pkt/trend-count',PktTrendHandler),
+
 ]
 # from handlers.index import IndexHandler
 # from handlers.domain import DomainIndexHandler,DomainTldNumHandler,DomainTldIndexHandler

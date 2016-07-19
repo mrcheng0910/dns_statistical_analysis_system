@@ -20,7 +20,7 @@ $(function () {
     });
 
     //var domain = $("#domain").val();
-    var domain = "baidu.com"
+    var domain = "baidu.com";
     var start = $("#start_date").val(); //获取初始化后页面的起始日期
     var end = $("#end_date").val(); //获取初始化后页面的终止日期
     
@@ -41,7 +41,7 @@ function init(categories,qry_pkt,resp_pkt){
     $('#container').highcharts({
 
         credits: {
-            enabled: false,
+            enabled: false
         },
         chart: {
             type: 'column',
@@ -105,7 +105,7 @@ function init(categories,qry_pkt,resp_pkt){
         }, {
             name: '响应包',
             data: resp_pkt
-        }],
+        }]
     });
 }
 
