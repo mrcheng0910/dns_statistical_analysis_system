@@ -7,7 +7,7 @@ urls = [
     # (r'/',IndexHandler),
     (r'/pkt/daily-count', PktDailyHandler),  # 天为单位统计
     (r'/pkt/same-day',ManageIncreaseHandler),  # 根据日期选择数据
-    (r'/pkt/trend-count',PktTrendHandler),
+    (r'/pkt/trend-count',PktTrendHandler),      # 趋势统计
 
 ]
 # from handlers.index import IndexHandler

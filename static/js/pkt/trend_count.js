@@ -1,9 +1,11 @@
 //初始化页面以及绑定函数
 $(function () {
     //初始化页面
+    current_date = new Date();
+    last_date = current_date.setMonth(current_date.getMonth() - 1);
     $('#datetimepicker-start').datetimepicker({
         format: "YYYY-MM-DD",
-        defaultDate: new Date(),
+        defaultDate: last_date,
         showTodayButton: true
     });
     $('#datetimepicker-end').datetimepicker({
@@ -54,7 +56,7 @@ function init(categories,pkt_count){
         },
         yAxis: {
             title: {
-                text: '请求报文数量（个）'
+                text: '报文数量（个）'
             }
         },
         legend: {
@@ -83,7 +85,7 @@ function init(categories,pkt_count){
         },
         series: [{
             type: 'area',
-            name: ' 报文数量',
+            name: ' DNS报文数量',
             //pointInterval: 24 * 3600 * 1000,
             //pointStart: Date.UTC(2006, 0, 1),
             //data: [
@@ -123,10 +125,9 @@ function get_data(domain,start,end) {
                 var value;
                 for(var i=0,arrLength=rawData.length; i<arrLength; i++){
                     value = rawData[i];
-                    //categories.push(value.visit_time);
-                    //qry_pkt.push(value.qry_pkt);
-                    //resp_pkt.push(value.resp_pkt);
-                    pkt_count.push([value.visit_time,value.qry_pkt+value.resp_pkt])
+                    categories.push(value.visit_time);
+                    // 8*60*60*1000,是转换为北京时间，单位为毫秒
+                    pkt_count.push([Date.parse(value.visit_time)+(8*60*60*1000),value.qry_pkt+value.resp_pkt]);
 
                 }
                 init(categories,pkt_count);
