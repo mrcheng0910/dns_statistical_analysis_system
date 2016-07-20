@@ -20,7 +20,7 @@ class ManageIncreaseHandler(tornado.web.RequestHandler):
         start = self.get_argument('start', "None")
         end = self.get_argument('end', "None")
         detect = get_same_day_pkt_count(domain, start, end)
-        # detect = test()
+        # detect = drawTable()
         # print detect
         self.write(detect)
 

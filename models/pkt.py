@@ -93,7 +93,7 @@ def get_same_day_pkt_count(domain, start, end):
     domain_dns_pkt = get_domain_info(domain, start, end)
     for pkt in domain_dns_pkt:
         tmp = {'visit_time': pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S"), 'qry_pkt': 0, 'resp_pkt': 0}
-        print pkt['visit_time']
+        # print pkt['visit_time']
         for i in pkt['details']:
             if len(i['dns']) <= 1:
                 tmp['qry_pkt'] += 1
@@ -103,4 +103,4 @@ def get_same_day_pkt_count(domain, start, end):
 
     return json.dumps(pkt_list)
 
-# test()
+# drawTable()

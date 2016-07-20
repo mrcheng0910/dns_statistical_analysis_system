@@ -50,7 +50,7 @@ def get_domain_info(domain=None,start_date=None,end_date=None):
     """
     # if start_date.date() == end_date.date():    # 获得域名的当天探测数据
     domain_collection = get_domain_collection(domain)
-    # test()
+    # drawTable()
     return domain_collection.find({'visit_time':{'$lte':end_date,'$gte':start_date}})
 
 def test():
@@ -58,7 +58,7 @@ def test():
     domain_collection = get_domain_collection('360.com')
     a = domain_collection.find({'pkt_count':120})
     domain_count = {}
-    print "this is test"
+    print "this is drawTable"
     for i in a:
         if i['visit_time'].strftime("%Y-%m-%d %H:%M:%S")=='2016-07-18 21:33:17':
             for j in  i['details']:
@@ -113,4 +113,4 @@ def get_same_day_pkt_count(domain,start,end):
 
     return json.dumps(pkt_list)
 
-# test()
+# drawTable()

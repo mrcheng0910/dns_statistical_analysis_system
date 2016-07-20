@@ -104,7 +104,7 @@ function init(categories,pkt_count){
 
 function get_data(domain,start,end) {
     //ajax获取最新统计数据，并更新页面
-    var raw_data;
+    var rawData;
     var categories =[];
     var qry_pkt = [];
     var resp_pkt = [];
