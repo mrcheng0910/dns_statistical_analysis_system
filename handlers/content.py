@@ -20,5 +20,10 @@ class ContentDataHandler(tornado.web.RequestHandler):
         end = self.get_argument('end', "None")
 
         content_data = get_dm_content(domain, start, end)
-        print content_data
         self.write(content_data)
+
+
+class RespContentHandler(tornado.web.RequestHandler):
+    def get(self):
+        # self.render(PATH+'resp_content.html')
+        self.render(PATH+'test.html')

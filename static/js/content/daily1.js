@@ -1,16 +1,42 @@
 /* Formatting function for row details - modify as you need */
 function format (d) {
-    // `d` is the original data object for the row
-    var format_tb = ""
-    for(var i in d[6]){
+    var head_table = '<thead><tr><th>请求域名</th><th>数量</th><th>响应域名</th><th>数量</th></tr></thead>'
+    var format_tb = "";
+    var dict_lenght = Object.keys(d[7]).length;
+    var first = [];
+    var second = [];
+    var third = [];
+    var fourth = [];
+    if (dict_lenght < Object.keys(d[8]).length){
+        dict_lenght = Object.keys(d[8]).length;
+    }
+
+    for (var i in d[7]){
+        first.push(i);
+        second.push(d[7][i]);
+    }
+    for (var i in d[8]){
+        third.push(i);
+        fourth.push(d[8][i]);
+    }
+    for (var i=0;i<dict_lenght;i++){
         format_tb +=
             '<tr>'+
-            '<td>'+i+'</td>'+
-            '<td>'+d[6][i]+'</td>'+
+                '<td>'+first[i]+'</td>'+
+                '<td>'+second[i]+'</td>'+
+                '<td>'+third[i]+'</td>'+
+                '<td>'+fourth[i]+'</td>'+
             '</tr>'
     }
+    //for(var i in d[7]){
+    //    format_tb +=
+    //        '<tr>'+
+    //            '<td>'+i+'</td>'+
+    //            '<td>'+d[7][i]+'</td>'+
+    //        '</tr>'
+    //}
     return '<table class="table table-striped table-bordered table-hover" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            format_tb+'</table>'
+            head_table + format_tb+'</table>'
 }
 
 
@@ -53,10 +79,9 @@ function getData(domain,startDate,endDate){
                 rawData = JSON.parse(data);
                 for(var i=0,arrLength=rawData.length; i<arrLength; i++) {
                     val = rawData[i];
-                    dataSet.push([" ",val.visit_time,val.pkt_count,val.qry_pkt,val.resp_pkt,val.domain_count,val.domains]);
+                    dataSet.push([" ",val.visit_time,val.pkt_count,val.qry_pkt,val.resp_pkt,val.qry_domain_count,val.resp_domain_count,val.qry_domains,val.resp_domains]);
                 }
-                //return dataSet
-                drawTable(dataSet);
+                drawTable(domain,dataSet);
 
             },
             error: function (xhr) {
@@ -70,47 +95,69 @@ function getData(domain,startDate,endDate){
 
 }
 
-function drawTable(dataSet){
-        $('#dataTables-example').dataTable().fnDestroy();
-        //$('#dataTables-example').removeEventListener("click",false);
-        //alert($('#dataTables-example tbody td.details-control').hasAttribute("onclick"));
+function drawTable(domain,dataSet){
 
-        table = $('#dataTables-example').DataTable({
-            responsive: true,
-            "data": dataSet,
-            //"bDestroy": true,
-            "columns": [
-                {
-                    "class": 'details-control',
-                    "orderable": false,
-                    "data": null,
-                    "defaultContent": ''
-                },
-                {"title": "访问时间" },
-                {"title": "报文数量" },
-                {"title": "请求报文数量" },
-                {"title": "响应报文数量"},
-                {"title": "域名数量"}
-            ],
-            "order": [[1, 'asc']]
-        });
+    //$('#dataTables-example').dataTable().fnDestroy();
 
-        // 控制隐藏和显示按钮
-        $('#dataTables-example tbody').on('click', 'td.details-control', function (){
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-            //alert("nihao")
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                // Open this row
-                row.child( format(row.data())).show();
-                tr.addClass('shown');
-            }
+    table = $('#dataTables-example').DataTable({
+        responsive: true,
+        "data": dataSet,
+        "bDestroy": true,
+        "columns": [
+            {
+                "class": 'details-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            },
+            {"title": "访问时间" },
+            {"title": "报文数量" },
+            {"title": "请求报文数量" },
+            //下列代码用来添加链接
+            //{"title": "响应报文数量","class":'resp-content',"render": function ( data, type, row ) {
+            //                                    return '<a>' + data + '</a>'
+            //    }},
+            {"title": "响应报文数量","class": "resp-content"},
+            {"title": "请求域名数量"},
+            {"title": "响应域名数量"}
+
+
+        ],
+        "order": [[1, 'asc']]
+    });
+
+    // 控制隐藏和显示按钮
+    $('#dataTables-example tbody').on('click', 'td.details-control', function (){
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+
+    //控制详细应答信息
+    $('#dataTables-example tbody').on('click', 'td.resp-content',function(){
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+        //alert(domain)
+        //alert(row.data()[1]);
+        layer.open({
+            type: 2,
+            title: '应答报文详细信息',
+            //maxmin: true,
+            shadeClose: true, //点击遮罩关闭层
+            area : ['80%' , '80%'],
+            content: '/content/resp'
         });
+    });
+
 
 }
 
@@ -129,6 +176,7 @@ $(document).ready(function(){
         startDate = $("#start_date").val();
         endDate = $("#end_date").val();
         $('#dataTables-example tbody').off('click','td.details-control');  //重要，为了去掉多次bind按钮事件
+        $('#dataTables-example tbody').off('click','td.resp-content');  //重要，为了去掉多次bind按钮事件
         getData(domain,startDate,endDate);
     });
 

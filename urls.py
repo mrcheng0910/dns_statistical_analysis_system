@@ -3,7 +3,7 @@
 系统路由设置
 """
 from handlers.pkt import PktDailyHandler,ManageIncreaseHandler,PktTrendHandler
-from handlers.content import ContentDailyHandler,ContentDataHandler
+from handlers.content import ContentDailyHandler,ContentDataHandler,RespContentHandler
 urls = [
     # (r'/',IndexHandler),
     (r'/pkt/daily-count', PktDailyHandler),  # 天为单位统计
@@ -12,7 +12,8 @@ urls = [
 
     # 内容
     (r'/content/daily',ContentDailyHandler),   # DNS请求包分析
-    (r'/content/get-data',ContentDataHandler)
+    (r'/content/get-data',ContentDataHandler),
+    (r'/content/resp',RespContentHandler)
 
 ]
 # from handlers.index import IndexHandler

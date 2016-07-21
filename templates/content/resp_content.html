@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{static_url("css/sb-admin-2.css")}}" rel="stylesheet">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <!--<style type="text/css">-->
+    <!--.row{-->
+        <!--margin-top: 0px;-->
+        <!--margin-right: 4px;-->
+        <!--margin-bottom: 0px;-->
+        <!--margin-left: 4px;-->
+    <!--}-->
+    <!--</style>-->
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-lg-4">
+            <!--<div class="panel panel-default">-->
+                <!--<div class="panel-heading">-->
+                    <!--<i class="fa fa-bar-chart-o fa-fw"></i>-->
+                        <!--域名请求分析-->
+                    <!--<div class="pull-right">-->
+                        <!--<code><span style="font-size:15px;"></span></code>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="panel-body">-->
+                    <div id="main" style="width: 500px;height:200px;"></div>
+
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="col-lg-4">
+            <div id="main1" style="width: 500px;height:200px;"></div>
+        </div>
+        <!--<div class="col-lg-6">-->
+             <!--<div class="panel panel-default">-->
+                <!--<div class="panel-heading">-->
+                    <!--<i class="fa fa-bar-chart-o fa-fw"></i>-->
+                        <!--域名请求分析-->
+                    <!--<div class="pull-right">-->
+                        <!--<code><span style="font-size:15px;"></span></code>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="panel-body">-->
+                    <!--<div id="main1" style="width: 500px;height:200px;"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+    <hr>
+
+
+    <script src="//cdn.bootcss.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.9/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.min.js"></script>
+    <script src="//cdn.bootcss.com/echarts/3.2.2/echarts.min.js"></script>
+ <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'domain'
+            },
+            tooltip: {},
+            animationDurationUpdate: 1500,
+            animationEasingUpdate: 'quinticInOut',
+            series : [
+                {
+                    type: 'graph',
+                    layout: 'none',
+                    symbolSize: 60,
+                    roam: true,
+                    label: {
+                        normal: {
+                            show: true
+                        }
+                    },
+                    edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [4, 10],
+                    edgeLabel: {
+                        normal: {
+                            textStyle: {
+                                fontSize: 20
+                            }
+                        }
+                    },
+                    data: [{
+                        name: 'baidu.com',
+                        x: 300,
+                        y: 300
+                    }, {
+                        name: '节点2',
+                        x: 800,
+                        y: 300
+                    }, {
+                        name: '节点3',
+                        x: 550,
+                        y: 100
+                    }, {
+                        name: '节点4',
+                        x: 550,
+                        y: 500
+                    }],
+                    // links: [],
+                    links: [{
+                        source: 0,
+                        target: 1,
+                        symbolSize: [5, 20],
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        },
+                        lineStyle: {
+                            normal: {
+                                width: 5,
+                                curveness: 0.2
+                            }
+                        }
+                    }, {
+                        source: '节点2',
+                        target: 'baidu.com',
+                        label: {
+                            normal: {
+                                show: true
+                            }
+                        },
+                        lineStyle: {
+                            normal: { curveness: 0.2 }
+                        }
+                    }, {
+                        source: 'baidu.com',
+                        target: '节点3'
+                    }, {
+                        source: '节点2',
+                        target: '节点3'
+                    }, {
+                        source: '节点2',
+                        target: '节点4'
+                    }, {
+                        source: 'baidu.com',
+                        target: '节点4'
+                    }],
+                    lineStyle: {
+                        normal: {
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>
