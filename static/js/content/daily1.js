@@ -144,17 +144,19 @@ function drawTable(domain,dataSet){
 
     //控制详细应答信息
     $('#dataTables-example tbody').on('click', 'td.resp-content',function(){
+        var url='/content/resp?domain='+domain;
+
         var tr = $(this).closest('tr');
         var row = table.row(tr);
-        //alert(domain)
-        //alert(row.data()[1]);
+        url = url + '&visit_time='+row.data()[1]
         layer.open({
             type: 2,
             title: '应答报文详细信息',
-            //maxmin: true,
+            maxmin: true,
             shadeClose: true, //点击遮罩关闭层
             area : ['80%' , '80%'],
-            content: '/content/resp'
+            //content: '/content/resp?domain='+'baidu.com'
+            content: url
         });
     });
 

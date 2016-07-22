@@ -13,7 +13,7 @@ urls = [
     # 内容
     (r'/content/daily',ContentDailyHandler),   # DNS请求包分析
     (r'/content/get-data',ContentDataHandler),
-    (r'/content/resp',RespContentHandler)
+    (r'/content/resp',RespContentHandler),
 
 ]
 # from handlers.index import IndexHandler

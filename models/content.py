@@ -20,7 +20,7 @@ def get_dm_content(domain,start_date,end_date):
         resp_domains = {}
         tmp = dict(visit_time="", pkt_count=0, qry_pkt=0, resp_pkt=0, qry_domain_count=0, resp_domain_count=0,
                    qry_domains=qry_domains, resp_domains=resp_domains)
-        visit_time = pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S")
+        visit_time = pkt['visit_time'].strftime("%Y-%m-%d %H:%M:%S.%f")
         tmp['visit_time'] = visit_time
         tmp['pkt_count'] = pkt['pkt_count']
         for i in pkt['details']:
@@ -41,8 +41,36 @@ def get_dm_content(domain,start_date,end_date):
         tmp['resp_domains'] = collections.OrderedDict(sorted(resp_domains.items()))
         tmp['qry_domain_count'] = len(qry_domains)
         tmp['resp_domain_count'] = len(resp_domains)
-        print tmp
         content.append(tmp)
     return json.dumps(content)
 
-# get_dm_content(domain,start_date,end_date)
+
+def get_time_content(domain=None,visit_time=None):
+    """
+    根据域名和访问时间，得到访问内容
+    :param domain:
+    :param visit_time:
+    :return:
+    """
+    # domain='baidu.com'
+    # visit_time = '2016-07-21 15:16:51.847000'
+    visit_time = datetime.strptime(visit_time, "%Y-%m-%d %H:%M:%S.%f")
+    domain_collection = get_domain_collection(domain)
+
+    domain_pkts = domain_collection.find({'visit_time': visit_time})
+    nodes = set()  # 防止出现重复数据
+    edges = set()
+    for pkt in domain_pkts[0]['details']:
+        if len(pkt['dns'])>1:
+            # print pkt['dns']['details']
+            # print pkt['dns']['qry_name']
+            for i in pkt['dns']['details']:
+                nodes.add(i['domain_name'])
+                nodes.add(i['dm_data'])
+                edges.add((i['domain_name'],i['dm_data']))
+
+
+    return json.dumps((list(nodes),list(edges)))
+    # print list(node)
+    # print edge
+# get_time_content()
