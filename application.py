@@ -2,6 +2,7 @@
 """
 定义应用
 """
+
 import tornado.web
 from urls import urls
 from settings import SETTINGS

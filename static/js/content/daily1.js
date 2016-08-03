@@ -154,7 +154,7 @@ function drawTable(domain,dataSet){
             title: '应答报文详细信息',
             maxmin: true,
             shadeClose: true, //点击遮罩关闭层
-            area : ['80%' , '80%'],
+            area : ['100%' , '100%'],
             //content: '/content/resp?domain='+'baidu.com'
             content: url
         });

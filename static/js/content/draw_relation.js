@@ -21,6 +21,9 @@ function drawRelation(nodes,edges){
 
     var myChart = echarts.init(document.getElementById('main'));
     // 指定图表的配置项和数据
+    myChart.showLoading();
+    myChart.hideLoading();
+
     var option = {
     title: {
         text: 'DNS响应结果关系图'
@@ -32,7 +35,7 @@ function drawRelation(nodes,edges){
         {
             type: 'graph',
             layout: 'force',
-            symbolSize: 15,
+            symbolSize: 10,
             roam: true,    //动画
             draggable:true,    //节点可拖拽
             focusNodeAdjacency:true, //显示临接的点和边
@@ -73,4 +76,5 @@ function drawRelation(nodes,edges){
         };
         // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+
 }

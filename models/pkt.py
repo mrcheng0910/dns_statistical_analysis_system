@@ -85,7 +85,7 @@ def get_domain_info(domain=None, start_date=None, end_date=None):
 
 
 def get_same_day_pkt_count(domain, start, end):
-
+    #todo:可以使用collections的Counter类进行统计
     start = datetime.strptime(start, '%Y-%m-%d')
     # end = datetime.utcnow()+ timedelta(hours=8)  # 当前时间，timedelta是为了成为北京时间
     end = datetime.strptime(end, '%Y-%m-%d') + timedelta(hours=24)
