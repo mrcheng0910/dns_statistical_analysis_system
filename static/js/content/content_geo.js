@@ -2,84 +2,51 @@ function manageData(data){
     //rawData = JSON.parse(data);
     var rawData = data;
     var domainData = [];
-    var city = [];
-    var network = [];
-    for(var i=0;i<rawData[0].length;i++){
-        domainData.push([{'name':rawData[0][i][0].name+'市'},{'name':rawData[0][i][1].name,'value':rawData[0][i][1].value}]);
-    }
-
-    for(var i=0;i<rawData[1].length;i++){
-        city.push([rawData[1][i][0],rawData[1][i][1]])
-    }
-
-    for(var i=0;i<rawData[2].length;i++){
-        if (rawData[2][i][0]=='') {
-            network.push(["bo", rawData[2][i][1]])
-        }
-        else {
-            network.push([rawData[2][i][0],rawData[2][i][1]])
-        }
+    for(var i=0;i<rawData.length;i++){
+        domainData.push([{'name':rawData[i][0].name+'市'},{'name':rawData[i][1].name,'value':rawData[i][1].value}]);
     }
     drawGeo(domainData);
-    drawPie("#container",city);
-    drawPie("#container1",network);
+
 
 }
 
 
-// $(document).ready(function(){
-//
-//     // drawGeo();
-//     var domain = "baidu.com";
-//     var detectGeo = "威海";
-//     var detectNetwork = "联通";
-//     var dnsGeo = "杭州";
-//     var dnsNetwork = "阿里云";
-//     var dnsIp = "223.5.5.5";
-//
-// } );
+function getData(domain,detected,detected_network,dns_geo,dns_network,dns){
+    // alert(domain+detected+detected_network+dns_geo+dns_network+dns)
+    $.ajax({
+        url: '/content/get-geo-data',
+        type: "get",
+        data: {
+            domain: domain,
+            detected:detected,
+            detected_network:detected_network,
+            dns_geo:dns_geo,
+            dns_network:dns_network,
+            dns:dns,
+            stamp: Math.random()   // 防止get方法使用缓存
+        },
+        timeout: 5000, //超时时间
+        success: function (data) {  //成功后的处理
+            var dataSet = [];
+            //json格式化原始数据
+            rawData = JSON.parse(data);
+            manageData(rawData);
 
-function drawPie(container,data) {
-    $(container).highcharts({
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
         },
-        title: {
-            text: null
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.y}个</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: {point.y} 个',
-                    style: {
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    }
-                }
+        error: function (xhr) {
+            if (xhr.status == "0") {
+                alert("超时，稍后重试");
+            } else {
+                alert("错误提示：" + xhr.status + " " + xhr.statusText);
             }
-        },
-        series: [{
-            type: 'pie',
-            name: 'IP数量',
-            data: data
-        }]
+        } // 出错后的处理
     });
+
 }
 
 
 function drawGeo(domainData, detected) {
     var chart = echarts.init(document.getElementById('main'));
-    // domainData = [
-    //     [{'name':"威海市"},{'name':'上海市','value':2}],
-    //     [{'name':"威海市"},{'name':'威海市','value':2}]
-    // ]
     var geoCoordMap = {
         '上海市': [121.4648,31.2891],
         '东莞市': [113.8953,22.901],

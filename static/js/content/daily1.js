@@ -1,4 +1,3 @@
-/* Formatting function for row details - modify as you need */
 function format (d) {
     var head_table = '<thead><tr><th>请求域名</th><th>数量</th><th>响应域名</th><th>数量</th></tr></thead>'
     var format_tb = "";
@@ -173,7 +172,6 @@ $(document).ready(function(){
     getData(domain,startDate,endDate);
 
     $("#query").bind('click',function(){  //为查询按钮绑定查询函数
-        //table.fnClearTable();
         domain = $("#domain").val();
         startDate = $("#start_date").val();
         endDate = $("#end_date").val();

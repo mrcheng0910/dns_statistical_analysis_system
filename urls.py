@@ -4,7 +4,7 @@
 """
 
 from handlers.pkt import PktDailyHandler,ManageIncreaseHandler,PktTrendHandler
-from handlers.content import ContentDailyHandler,ContentDataHandler,RespContentHandler,RespContentGeo
+from handlers.content import *
 
 
 urls = [
@@ -17,6 +17,10 @@ urls = [
     (r'/content/daily',ContentDailyHandler),   # DNS请求包分析
     (r'/content/get-data',ContentDataHandler),
     (r'/content/resp',RespContentHandler),
-    (r'/content/geo',RespContentGeo)
+    (r'/content/geo',RespContentGeo),
+    (r'/content/details',RespContentDetail),
+    (r'/content/get-details-data',ContentContentData),
+    (r'/content/get-geo-data',RespContentGeoData),
+    (r'/content/delete-data',DeleteData)
 
 ]
