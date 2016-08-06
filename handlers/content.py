@@ -1,7 +1,7 @@
 # encoding:utf-8
 
 import tornado.web
-from models.content import get_dm_content,get_time_content,get_domain_geo,get_details_data
+from models.content import get_dm_content,get_time_content,get_domain_geo,get_details_data,delete_data
 
 PATH = './content/'
 
@@ -100,4 +100,22 @@ class ContentContentData(tornado.web.RequestHandler):
 
 class DeleteData(tornado.web.RequestHandler):
     def get(self):
-        self.write("True")
+        domain_name = self.get_argument('domain', "None")
+        detected_geo = self.get_argument('detected', "None")
+        detected_network = self.get_argument('detected_network', "None")
+        dns_geo = self.get_argument('dns_geo', "None")
+        dns_network = self.get_argument('dns_network', "None")
+        dns = self.get_argument('dns', "None")
+        qry_name = self.get_argument('qry_name',"None")
+
+        domain_info = {
+            'domain_name': domain_name.strip(),
+            'detected_geo': detected_geo.strip(),
+            'detected_network': detected_network.strip(),
+            'dns_geo': dns_geo.strip(),
+            "dns_network": dns_network.strip(),
+            "dns": dns.strip()
+        }
+
+        result = delete_data(domain_info,qry_name)
+        self.write(result)

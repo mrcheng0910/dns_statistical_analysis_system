@@ -5,10 +5,12 @@
 
 from handlers.pkt import PktDailyHandler,ManageIncreaseHandler,PktTrendHandler
 from handlers.content import *
+from handlers.index import IndexHandler
 
 
 urls = [
-    # (r'/',IndexHandler),
+    (r'/',IndexHandler),
+
     (r'/pkt/daily-count', PktDailyHandler),  # 天为单位统计
     (r'/pkt/same-day',ManageIncreaseHandler),  # 根据日期选择数据
     (r'/pkt/trend-count',PktTrendHandler),      # 趋势统计

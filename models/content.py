@@ -5,7 +5,7 @@ from datetime import datetime,timedelta
 import json
 import collections
 from collections import Counter
-
+from pymongo import ReturnDocument
 
 def get_dm_content(domain,start_date,end_date):
 
@@ -128,25 +128,61 @@ def get_details_data(domain_info):
                                           'dns': dns
                                           }).limit(1)
 
+    # result = {
+    #     'domain_name': domain_name,
+    #     'visit_total': 0,
+    #     'domain_count': 0,
+    #     'details': {}
+    # }
+    #
+    # visit_total = 0  # 域名解析次数
+    # result['domain_count'] = len(domain_pkts[0]['details'])  # 解析域名数量
+    # result['details']=domain_pkts[0]['details']
+    #
+    # city_value = Counter()
+    # network_distribution = Counter()
+    # city = []
+    # network = []
+    # appeard_ip = []  # 去除重复IP
+    # for i in domain_pkts[0]['details']:
+    #     visit_total += i['visit_count']
+    #     for v in i['answers']:
+    #         if v['dm_type'] == 'A':
+    #             if v['dm_data'] in appeard_ip:
+    #                 continue
+    #             else:
+    #                 appeard_ip.append(v['dm_data'])
+    #                 city_value[v['geo']] += 1
+    #                 network_distribution[v['network_operator']] += 1
+    # result['visit_total'] = visit_total
+    # for i in city_value:
+    #     city.append([i, city_value[i]])
+    # for i in network_distribution:
+    #     network.append([i, network_distribution[i]])
+    # return json.dumps([result,city,network])
+    result = manage_data(domain_name,domain_pkts[0])
+    return result
+
+
+def manage_data(domain_name,domain_pkts):
     result = {
         'domain_name': domain_name,
         'visit_total': 0,
         'domain_count': 0,
         'details': {}
     }
-    visit_total = domain_pkts[0]['visit_total']
-    domain_count = domain_pkts[0]['domain_count']
-    result['visit_total'] = visit_total
-    result['domain_count'] = domain_count
-    result['details']=domain_pkts[0]['details']
+
+    visit_total = 0  # 域名解析次数
+    result['domain_count'] = len(domain_pkts['details'])  # 解析域名数量
+    result['details'] = domain_pkts['details']
 
     city_value = Counter()
     network_distribution = Counter()
     city = []
     network = []
     appeard_ip = []  # 去除重复IP
-    for i in domain_pkts[0]['details']:
-
+    for i in domain_pkts['details']:
+        visit_total += i['visit_count']
         for v in i['answers']:
             if v['dm_type'] == 'A':
                 if v['dm_data'] in appeard_ip:
@@ -155,9 +191,28 @@ def get_details_data(domain_info):
                     appeard_ip.append(v['dm_data'])
                     city_value[v['geo']] += 1
                     network_distribution[v['network_operator']] += 1
-
+    result['visit_total'] = visit_total
     for i in city_value:
         city.append([i, city_value[i]])
     for i in network_distribution:
         network.append([i, network_distribution[i]])
-    return json.dumps([result,city,network])
+    return json.dumps([result, city, network])
+
+
+def delete_data(domain_info,qry_name):
+    domain_name = domain_info['domain_name']
+    detected_geo = domain_info['detected_geo']
+    detected_network = domain_info['detected_network']
+    dns_geo = domain_info['dns_geo']
+    dns_network = domain_info['dns_network']
+    dns = domain_info['dns']
+    domain_collection = get_domain_collection('data_info')
+    domain_pkt = domain_collection.find_one_and_update(
+        {'domain_name': domain_name},
+        { '$pull': {'details': {'qry_name': qry_name}}},
+        return_document=ReturnDocument.AFTER
+    )
+    result = manage_data(domain_name,domain_pkt)
+    return result
+
+# delete_data('dfd','dd')

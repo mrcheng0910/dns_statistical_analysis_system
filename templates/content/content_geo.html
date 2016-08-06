@@ -26,7 +26,7 @@
             </div>
             <div class="panel-body">
                 <!-- form -->
-                <form role="form">
+                <form role="form" onkeydown="if(event.keyCode==13){return false;}">
                     <!-- form-group -->
                     <div class="form-group">
                         <label for="domain">查询域名</label>
@@ -114,7 +114,12 @@
     $(function(){
         manageData({% raw result %});
 
-        $("#query").bind('click',function(){  //为查询按钮绑定查询函数
+        $(document).keydown(function(event){
+            if(event.keyCode==13){
+                $("#query").click();
+            }
+        });
+        $("#query").click(function () {
             var domain = $("#domain").val();
             var detected = $("#detected").val();
             var detected_network = $("#detected-network").val();
@@ -122,7 +127,16 @@
             var dns_network = $("#dns-network").val();
             var dns = $("#dns").val();
             getData(domain,detected,detected_network,dns_geo,dns_network,dns);
-    });
+        });
+//        $("#query").bind('click',function(){  //为查询按钮绑定查询函数
+//            var domain = $("#domain").val();
+//            var detected = $("#detected").val();
+//            var detected_network = $("#detected-network").val();
+//            var dns_geo = $("#dns-geo").val();
+//            var dns_network = $("#dns-network").val();
+//            var dns = $("#dns").val();
+//            getData(domain,detected,detected_network,dns_geo,dns_network,dns);
+//    });
     });
 </script>
 

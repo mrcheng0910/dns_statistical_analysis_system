@@ -115,8 +115,8 @@ function drawTable(dataSet) {
             {
                 "title": "操作",
                 "data":null,
-                "class":'dt-center',
-                "defaultContent": "<button class='btn btn-primary'>删除数据</button>"
+                "class":'test-btn',
+                "defaultContent": "<button class='btn btn-danger'>删除数据</button>"
             }
         ],
         "order": [[1, 'asc']]
@@ -124,6 +124,7 @@ function drawTable(dataSet) {
     // 控制隐藏和显示按钮
     $('#dataTables-example tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
+        // alert("nj")
         var row = table.row(tr);
         if (row.child.isShown()) {
             row.child.hide();
@@ -135,19 +136,25 @@ function drawTable(dataSet) {
             tr.addClass('shown');
         }
     });
-    $('#dataTables-example tbody').on( 'click', 'button', function () {
+    //删除功能
+    $('#dataTables-example tbody').on( 'click', 'td.test-btn', function () {
         var data = table.row( $(this).parents('tr') ).data();
+        // alert("niah")
+
         layer.confirm(
             '<label>确认删除域名： '+data[1]+' ?</label>',
             {
+
               btn: ['确认','取消'] //按钮
             },
             function(){
-                deleteData();
+                deleteData(data[1]);
                 layer.msg('删除成功', {icon: 1});
-
+                $('#dataTables-example tbody').off('click','td.details-control');  //重要，为了去掉多次bind按钮事件
+                 $('#dataTables-example tbody').off('click','td.test-btn');  //重要，为了去掉多次bind按钮事件
             },
             function(){
+
               layer.msg('取消删除', {
               });
             });
@@ -157,7 +164,7 @@ function drawTable(dataSet) {
 }
 
 //删除数据
-function deleteData() {
+function deleteData(qry_name) {
     var domain = $("#domain").val();
     var detected = $("#detected").val();
     var detected_network = $("#detected-network").val();
@@ -168,15 +175,20 @@ function deleteData() {
             url: '/content/delete-data',
             type: "get",
             data: {
+                domain: domain,
+                detected:detected,
+                detected_network:detected_network,
+                dns_geo:dns_geo,
+                dns_network:dns_network,
                 dns:dns,
+                qry_name:qry_name,
                 stamp: Math.random()   // 防止get方法使用缓存
             },
             timeout: 5000, //超时时间
             success: function (data) {  //成功后的处理
-                alert(data);
 
-                // var dataSet = manageData(data);
-                // drawTable(dataSet);
+                var dataSet = manageData(data);
+                drawTable(dataSet);
             },
             error: function (xhr) {
                 if (xhr.status == "0") {
@@ -226,24 +238,33 @@ function drawPie(container,data) {
 
 $(document).ready(function(){
 
+    //初始化页面
     var domain = $("#domain").val();
     var detected = $("#detected").val();
     var detected_network = $("#detected-network").val();
     var dns_geo = $("#dns-geo").val();
     var dns_network = $("#dns-network").val();
     var dns = $("#dns").val();
-
     getData(domain,detected,detected_network,dns_geo,dns_network,dns);
 
-    $("#query").bind('click',function(){  //为查询按钮绑定查询函数
-        var domain = $("#domain").val();
-        var detected = $("#detected").val();
-        var detected_network = $("#detected-network").val();
-        var dns_geo = $("#dns-geo").val();
-        var dns_network = $("#dns-network").val();
-        var dns = $("#dns").val();
-        $('#dataTables-example tbody').off('click','td.details-control');  //重要，为了去掉多次bind按钮事件
-       getData(domain,detected,detected_network,dns_geo,dns_network,dns);
+    //为查询按钮绑定回车事件，记得在form控件里，禁止回车事件
+    $(document).keydown(function(event){
+        if(event.keyCode==13){
+        $("#query").click();
+        }
+    });
+
+    //为查询按钮绑定事件
+     $("#query").click(function(){
+         var domain = $("#domain").val();
+         var detected = $("#detected").val();
+         var detected_network = $("#detected-network").val();
+         var dns_geo = $("#dns-geo").val();
+         var dns_network = $("#dns-network").val();
+         var dns = $("#dns").val();
+         $('#dataTables-example tbody').off('click','td.details-control');  //重要，为了去掉多次bind按钮事件
+         $('#dataTables-example tbody').off('click','td.test-btn');  //重要，为了去掉多次bind按钮事件
+         getData(domain,detected,detected_network,dns_geo,dns_network,dns);
     });
 
 } );

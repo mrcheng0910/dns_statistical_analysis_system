@@ -1,135 +1,54 @@
 {% extends "main_template.html" %}
 
 {% block title_name %}
-<title>域名WHOIS统计系统首页</title>
+<title>站点域名解析数据检测与分析系统</title>
 {% end %}
 
 {% block page %}
 
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">域名及WHOIS信息概览</h1>
-    </div>
-</div>
-<div class="row">
-    <!--domain-->
-    <div class="col-lg-3">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-database fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{{ domain_num }}</div>
-                        <div>域名总量(百万)</div>
-                    </div>
-                </div>
-            </div>
-            <a href="/domain/overall">
-                <div class="panel-footer">
-                    <span class="pull-left">查看详细</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
+<div class="container" style="margin-top: 10px">
+    <div class="row">
+    <header class="jumbotron">
+        <h2>站点域名解析数据检测与分析系统</h2>
+        <p>该系统通过模拟浏览器访问检测站点，采集探测点网卡解析数据，分析站点的解析数据</p>
+        <p><a class="btn btn-primary btn-large">了解更多信息</a>
+        </p>
+    </header>
+
+        <div class="page-header">
+            <h2>主题分类</h2>
         </div>
-    </div><!--//domain-->
-    <!--whois-->
-    <div class="col-lg-3">
-        <div class="panel panel-green">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-archive fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{{ whois_sum }}</div>
-                        <div>域名WHOIS信息(百万)</div>
-                    </div>
-                </div>
-            </div>
-            <a href="/detect">
-                <div class="panel-footer">
-                    <span class="pull-left">查看详细</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
+         <p>探测站点的主题主要分为搜索引擎、新闻网站、门户网站、视频网站、购物网站等，同类网站进行相互比较。</p>
+        <div class="page-header">
+            <h3>搜索引擎</h3>
         </div>
-    </div><!--//whois-->
-    <!--tld-->
-    <div class="col-lg-3">
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-globe fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{{ tld_num }}</div>
-                        <div>域名顶级后缀数量</div>
-                    </div>
-                </div>
-            </div>
-            <a href="/tld">
-                <div class="panel-footer">
-                    <span class="pull-left">查看详细</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
+        <p>百度、360搜索、soso、搜狗、bing搜索</p>
+        <div class="page-header">
+            <h3>新闻网站</h3>
         </div>
-    </div><!--//tld-->
-    <!--svr-->
-    <div class="col-lg-3">
-        <div class="panel panel-red">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-server fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="medium">{{ msvr_sum }}/{{ ssvr_sum }}</div>
-                        <div>域名WHOIS服务器数量</div>
-                    </div>
-                </div>
-            </div>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">查看详细</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
+        <p>今日头条、网易新闻、腾讯新闻、光明网、凤凰网、新浪新闻</p>
+        <div class="page-header">
+            <h3>购物网站</h3>
         </div>
-    </div><!--//svr-->
-</div><!--//row -->
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <i class="fa fa-bar-chart-o fa-fw"></i>
-                域名WHOIS信息探测效率分析
-                <div class="pull-right"></div>
-            </div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                <!-- <div id="morris-area-chart"></div> -->
-                <div id="container" style="width:100%;height:100%">
-                </div>
-            </div>
+        <p>淘宝、京东、亚马逊、阿里巴巴</p>
+        <div class="page-header">
+            <h3>高校</h3>
         </div>
+        <p>哈尔滨工业大学（威海）</p>
+        <div class="page-header">
+            <h3>视频网站</h3>
+        </div>
+        <p>爱奇异、bilibili、土豆视频</p>
+        <div class="page-header">
+            <h3>社区</h3>
+        </div>
+        <p>天涯论坛</p>
+
+
     </div>
 </div>
 {% end %}
 
 {% block foot_script %}
 <script src="//cdn.hcharts.cn/highcharts/highcharts.js"></script>
-<script src="{{ static_url("js/index.js")}}"></script>
-<script>
-    $(function(){
-       show({% raw domains %});
-    });
-</script>
 {% end %}
